@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>svg形状</title>
+  </head>
+  <style media="screen">
+      html, body {
+        width: 100%;
+        height: 100%;
+        padding:0;
+        margin:0;
+      }
+      .box {
+        margin:10px;
+          width: 500px;
+          height: 500px;
+          border: 1px solid gray;
+      }
+
+  </style>
+  <body>
+      <div class="box">
+        <svg id="svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0,0,500,500" version="1.1">
+           <rect x="10" y="10" width="100" height="100" rx="10" ry="10"
+           style="fill: green; stroke: pink; stroke-width:1; fill-opacity:0.1; stroke-opacity: 0.5" >
+           </rect>
+           <text x="400" y="400" >文本</text>
+
+         <circle x="10" y="130" r="50" cx="60" cy="180" fill="green" />
+         <ellipse x="320" y="10" cx="220" cy="70" rx="60" ry="40" style="fill:lime"/>
+        </svg>
+      </div>
+      <div class="box">
+          <svg id="svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0,0,500,500" version="1.1">
+              <line x1="10" y1="10" x2="200" y2="200" style="stroke:rgb(255,0,0); stroke-width:2" />
+          </svg>
+      </div>
+
+      <div class="box">
+          <svg id="svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0,0,500,500" version="1.1">
+            <polygon points="100,10 40,180 190,60 10,60 160,180"  style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;" />
+          </svg>
+      </div>
+
+      <div class="box">
+          <svg id="svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0,0,500,500" version="1.1">
+            <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
+ style="fill:none;stroke:black;stroke-width:3" />
+          </svg>
+      </div>
+  </body>
+  <script type="text/javascript">
+      window.onload = function (){
+          var svg = document.querySelector("svg");
+          var rect = svg.getElementsByTagName("rect");
+
+          var x = 10;
+
+          var fn = function (dom) {
+              var dir = "right",
+                  x = 10;
+              var t = setInterval(function () {
+                 dom.setAttribute("x",x);
+                 if(x === 10) {
+                   dir = "right";
+                 }
+                 if(x === 100) {
+                   dir = "left";
+                 }
+
+                 dir === "right"? x++:x--
+              }, 10);
+          }
+
+          //fn(rect[0]);
+      }
+  </script>
+</html>

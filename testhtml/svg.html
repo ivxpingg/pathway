@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+        html, body{
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          width: 100%;
+        }
+        #drawing {
+          width: auto;
+          width: 2700px;
+          height: 2093px;
+          margin: 30px;
+          box-sizing: border-box;
+          border: 5px solid green;
+          background-image: url(../xm_map_bg.jpg);
+          background-size:cover;
+          background-repeat: no-repeat;
+          overflow: hidden;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div id="drawing" class="">
+
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../data/lineInfo.js"></script>
+  <script type="text/javascript" src="../dist/svg.min.js"></script>
+  <script type="text/javascript">
+       var getLinePathArry = function (name) {
+           var line1 = lineData[name];
+           var pathArry = [];
+
+           line1.stationInfo.forEach(function (val, index) {
+               if(index === 0) {
+                   pathArry.push([val.type, val.point.abs.x, val.point.abs.y]);
+               }
+               else {
+                   pathArry.push([val.type, val.point.rel.x, val.point.rel.y]);
+               }
+            });
+
+            return pathArry;
+       };
+
+       // 设置线路文本和标签
+       var setLineText = function (svg, name) {
+         var line = lineData[name];
+         var pointX, pointY;
+         line.stationInfo.forEach(function (val, index, arry) {
+             if (index === 0) {
+               pointX = val.point.abs.x;
+               pointY = val.point.abs.y;
+               svg.text(line.lineNum + "号线").move(pointX, pointY - 20);
+             }
+             else {
+               pointX = pointX + val.point.rel.x;
+               pointY = pointY + val.point.rel.y;
+             }
+
+             if (val.isStation) {
+               svg.text(val.name).move(pointX, pointY + 10);
+
+               svg.circle(12).move(pointX-6, pointY-6).fill("#fff").stroke({
+                 color: "#000",
+                 width:2
+               });
+             }
+
+         });
+       }
+
+       // 开一辆车
+       var moveCar = function (svg, name, direction) {
+          var rect = svg.rect(12, 12).fill("green").stroke({
+            color: "#333",
+            width: 2
+          });
+
+          var line = lineData[name];
+          var stations = line.stationInfo; //direction ? line.stationInfo : line.stationInfo.reverse;
+
+          var pointX, pointY;
+
+          stations.forEach(function (val, index, arr) {
+             if (index === 0) {
+               pointX = val.point.abs.x - 6;
+               pointY = val.point.abs.y - 6
+               rect = rect.move(pointX, pointY).animate(2000);
+             }
+             else {
+               pointX +=  val.point.rel.x;
+               pointY +=  val.point.rel.y;
+               rect.fill("yellow");
+
+               if (val.isStation) {
+                 rect = rect.animate().move(pointX, pointY);
+                 rect.fill("green").animate(2000);
+               }
+               else {
+                 rect = rect.animate().move(pointX, pointY);
+               }
+
+               if (index === (arr.length - 1)) {
+                 rect.afterAll(function () {
+                    rect._target.node.parentNode.removeChild(rect._target.node)
+                 })
+               }
+             }
+          });
+       }
+
+       window.onload = function () {
+           var draw = SVG("drawing").attr("preserveAspectRatio", "xMidYMid meet");
+           var box = draw.viewbox(0,0,2700, 2093);
+           var arr = getLinePathArry('line1');
+
+           console.dir(draw.node.removeChild);
+
+           var path = box.path(arr).fill("none").stroke({
+              color: "rgb(132,29,33)",
+              width: 9,
+              linejoin: "round"
+            });
+
+            setLineText(box, 'line1');
+
+            moveCar(box, 'line1', true);
+          //  var path = box.path("M1003 1936 l60 0 l53 -50 l26 -28 l0 -57").fill("none").stroke({
+          //    color: "rgb(132,29,33)",
+          //    width: 9,
+          //    linecap: "round"
+          //  });
+       }
+
+
+  </script>
+</html>
