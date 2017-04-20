@@ -2,10 +2,10 @@
 
 var index = {
   $container: $("#container"),
-  containerX: 2700/2,
+  containerX: 2700,
   ratioChange: 10,   // 变化比例
   ratioValue: 100,   // svg比例
-  ratioValueMax: 500,
+  ratioValueMax: 500,  //
   ratioValueMin: 10,
   ratio: 1.29,
 
@@ -86,7 +86,7 @@ var index = {
 
   // 创建SVG轨道线路
   createRailSVG: function (){
-    index.rail = new rail("svg", lineData, {
+    index.rail = new rail("svg", {
       lineColor: {
         line1: "rgb(132, 29, 32)",
         line2: "rgb(133, 212, 0)",
@@ -95,9 +95,27 @@ var index = {
         line5: "rgb(247, 207, 11)",
         line6: "rgb(248, 113, 5)"
       }
-    });
+  }, lined, station);
     index.rail.svg = index.rail.svg.attr("preserveAspectRatio", "xMidYMid meet").viewbox(0,0,2700, 2093);
     index.rail.init();
+
+    var num = 1;
+    var onum = 1;
+    index.rail.createCar("line1",true,{ name: "line1" + num });
+    index.rail.createCar("line2",true,{ name: "line2" + num });
+    // setTimeout(function () {
+    //     index.rail.createCar("line1",true,{ name: "line1" + num });
+    //     index.rail.createCar("line2",true,{ name: "line2" + num });
+    //     num++;
+    //     setTimeout(arguments.callee, 10000);
+    // }, 10000);
+    //
+    // setTimeout(function () {
+    //     index.rail.createCar("line1",false,{ name: "oline1" + onum });
+    //     index.rail.createCar("line2",false,{ name: "oline2" + onum });
+    //     onum++;
+    //     setTimeout(arguments.callee, 10000);
+    // }, 10000);
   }
 };
 
