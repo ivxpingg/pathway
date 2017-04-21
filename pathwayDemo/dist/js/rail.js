@@ -222,6 +222,7 @@ rail.prototype.createCar = function (line, direction, info) {
         data = o.lineData[line],
         runTime,
         lineStationList = direction ? data.stationInfo : data.stationInfo.reverse();
+        // angle;
 
     // var rect = svg.image("dist/images/train.svg").size(40, 40).fill("green").stroke({
     var train = svg.group().fill(p.lineColor[line] || p.lineColor[0]);
@@ -233,21 +234,38 @@ rail.prototype.createCar = function (line, direction, info) {
   }).mouseover(function () {
       console.dir(this.data("info"));
   });
-    
+
     var image = svg.image('dist/images/train.svg').size(30,30).move(-15,-15);
+    var txt = direction ? "上行": "下行";
+    var text = svg.text(txt).move(direction?45:-75,direction? -30-6:30-6).font({
+        size: 12,
+        fill: "#000"
+    });
+    var rect = svg.rect(60, 30).fill(p.lineColor[line] || p.lineColor[0]).move(direction?30:-90, direction?-30-15:30-15).opacity(0.8);
     train.add(train1);
+    train.add(rect);
     train.add(image);
+    train.add(text);
 
     lineStationList.forEach(function(val, index, arr) {
-        pointX = val.stationInfo.point.x;// + (direction? 5:-5);
-        pointY = val.stationInfo.point.y;// + (direction? 5:-5);
+        pointX = val.stationInfo.point.x;
+        pointY = val.stationInfo.point.y;
+
+        var name = val.stationInfo.name;
+
+
         if(index === 0) {
             train = train.move(pointX, pointY).animate(val.stayTime * p.speed);
         }
         else {
             //train.fill("yellow");
             runTime = direction ? val.stationInfo.runNextStationTime : val.stationInfo.runPreStationTime;
-            train = train.animate(runTime * p.speed).move(pointX, pointY);
+            train = train.animate(runTime * p.speed).move(pointX, pointY).after(function (){
+
+                this.get(3).text();
+            });
+
+
             if(val.isStation) {
                 train.fill(p.lineColor[line] || p.lineColor[0]).animate( val.stayTime * p.speed);
             }
@@ -264,5 +282,41 @@ rail.prototype.createCar = function (line, direction, info) {
         }
 
     });
+
+    direction ? data.stationInfo : data.stationInfo.reverse();
+
+}
+
+// 根据2个坐标点计算角度， 以Y轴正方向为起点，顺时针方向计算偏移角度。
+//
+//            |    Y
+//            |
+//     4      |     1
+//            |
+// -------------------------> X
+//            |
+//     3      |     2
+//            |
+//            |
+rail.prototype.angle = function(sPoint,ePoint) {
+    var x = sPoint.x - ePoint.x,
+        y = sPoint.y - ePoint.y,
+        area,
+        angle = 0;
+    // 判断角度在哪区
+    if (x === 0 && y === 0) { return 0; }
+
+    if (x === 0 && y > 0) { return 0; }
+
+    if (x === 0 && y < 0) { return 180; }
+
+    if (x > 0 && y === 0) { return 270; }
+    if (x < 0 && y === 0) { return 90; }
+
+    angle = Math.abs(360 * Math.atan(x / y) / (2 * Math.PI));
+    if (x > 0 && y > 0) { return 270 + angle; }  // 4 区
+    if (x > 0 && y < 0) { return 180 + angle; }   // 3区
+    if (x < 0 && y < 0) { return 90 + angle; }  // 2区
+    if (x < 0 && y > 0) { return angle; }  // 1区
 
 }

@@ -1,5 +1,5 @@
 var station = [
-    {   id: "10001",   name: "中山商圈南",   isTransfer: false,   point: { x: 993, y: 1917 },   textPoint: { rx: -10, ry: 20 } },
+    {   id: "10001",   name: "中山商圈南",   isTransfer: false,   point: { x: 993, y: 1917  },   textPoint: { rx: -10, ry: 20 } },
     {   id: "10002",   name: "中山公园",   isTransfer: false,   point: { x: 1052, y: 1917 },   textPoint: { rx: 20, ry: -6 }},
     {   id: "10003",   name: "将军祠",   isTransfer: false,   point: { x: 1104, y: 1869 },   textPoint: { rx: 20, ry: -6 }},
     {   id: "10004",   name: "文灶",   isTransfer: false,   point: { x: 1129, y: 1786 },   textPoint: { rx: -60, ry: -10 }},
