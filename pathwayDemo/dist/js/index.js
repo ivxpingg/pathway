@@ -100,20 +100,20 @@ var index = {
 
     var num = 1;
     var onum = 1;
-    index.rail.createCar("line1",true,{ name: "line1" + num });
-    index.rail.createCar("line2",true,{ name: "line2" + num });
-    index.rail.createCar("line1",false,{ name: "oline1" + onum });
-    index.rail.createCar("line2",false,{ name: "oline2" + onum });
+    index.rail.createCar("line1",true,{ name: "line1" + num, person: 50 });
+    index.rail.createCar("line2",true,{ name: "line2" + num, person: 50 });
+    index.rail.createCar("line1",false,{ name: "oline1" + onum, person: 50 });
+    index.rail.createCar("line2",false,{ name: "oline2" + onum, person: 50 });
     setTimeout(function () {
-        index.rail.createCar("line1",true,{ name: "line1" + num });
-        index.rail.createCar("line2",true,{ name: "line2" + num });
+        index.rail.createCar("line1",true,{ name: "line1" + num, person: 50 });
+        index.rail.createCar("line2",true,{ name: "line2" + num, person: 50 });
         num++;
         setTimeout(arguments.callee, 10000);
     }, 10000);
 
     setTimeout(function () {
-        index.rail.createCar("line1",false,{ name: "oline1" + onum });
-        index.rail.createCar("line2",false,{ name: "oline2" + onum });
+        index.rail.createCar("line1",false,{ name: "oline1" + onum, person: 50 });
+        index.rail.createCar("line2",false,{ name: "oline2" + onum, person: 50 });
         onum++;
         setTimeout(arguments.callee, 10000);
     }, 10000);

@@ -226,33 +226,26 @@ rail.prototype.createCar = function (line, direction, info) {
 
     // var rect = svg.image("dist/images/train.svg").size(40, 40).fill("green").stroke({
     var train = svg.group().fill(p.lineColor[line] || p.lineColor[0]);
-    var train1 = svg.circle(30).move(-15,-15).stroke({
-      color: "#333",
-      width: 2
-  }).data({
-      info: info
-  }).mouseover(function () {
-      console.dir(this.data("info"));
-  });
+    var circle = svg.circle(30).move(-15,-15).stroke({ color: "#333", width: 2 }).data({ info: info }).mouseover(function () { console.dir(this.data("info")); });
 
     var image = svg.image('dist/images/train.svg').size(30,30).move(-15,-15);
-    var txt = direction ? "上行": "下行";
-    var text = svg.text(txt).move(direction?45:-75,direction? -30-6:30-6).font({
-        size: 12,
-        fill: "#000"
-    });
+    var txt = direction ? moment().format("mm:ss"): moment().format("mm:ss");
+    var text = svg.text(txt).move(direction?35:-85,direction? -30-6:30-6).font({size: 12, fill: "#000" });
+    // var rect = svg.rect(60, 30).fill(p.lineColor[line] || p.lineColor[0]).move(direction?30:-90, direction?-30-15:30-15).opacity(0.8);
     var rect = svg.rect(60, 30).fill(p.lineColor[line] || p.lineColor[0]).move(direction?30:-90, direction?-30-15:30-15).opacity(0.8);
-    train.add(train1);
+    var line = svg.line(direction?8:-8,direction?-8:8,direction?30:-30,direction?-30:30).stroke({ color: p.lineColor[line] || p.lineColor[0], width: 3, linecap: 'round' });
+
+    train.add(circle);
     train.add(rect);
     train.add(image);
     train.add(text);
+    train.add(line);
 
     lineStationList.forEach(function(val, index, arr) {
         pointX = val.stationInfo.point.x;
         pointY = val.stationInfo.point.y;
 
         var name = val.stationInfo.name;
-
 
         if(index === 0) {
             train = train.move(pointX, pointY).animate(val.stayTime * p.speed);
@@ -267,6 +260,9 @@ rail.prototype.createCar = function (line, direction, info) {
 
 
             if(val.isStation) {
+                train.get(0).data("info").person += o.getRandom(0, 100);
+                train.get(0).data("info").person -= o.getRandom(0, 100);
+                if ()
                 train.fill(p.lineColor[line] || p.lineColor[0]).animate( val.stayTime * p.speed);
             }
             else {
@@ -286,6 +282,7 @@ rail.prototype.createCar = function (line, direction, info) {
     direction ? data.stationInfo : data.stationInfo.reverse();
 
 }
+
 
 // 根据2个坐标点计算角度， 以Y轴正方向为起点，顺时针方向计算偏移角度。
 //
@@ -319,4 +316,16 @@ rail.prototype.angle = function(sPoint,ePoint) {
     if (x < 0 && y < 0) { return 90 + angle; }  // 2区
     if (x < 0 && y > 0) { return angle; }  // 1区
 
+}
+
+// 获取随机数(整数)
+// @param min: 最小值 默认 1
+// @param max: 最大值 默认 100
+rail.prototype.getRandom = function(min, max) {
+    min = min || 1;
+    max = max || 100;
+    var r = Math.random() * (max - min);
+    var re = Math.round(r + min);
+    re = Math.max(Math.min(re, max), min)
+    return re;
 }
